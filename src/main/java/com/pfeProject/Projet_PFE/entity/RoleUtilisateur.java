@@ -1,11 +1,13 @@
 package com.pfeProject.Projet_PFE.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "role_utilisateur")
 public class RoleUtilisateur {
@@ -15,15 +17,17 @@ public class RoleUtilisateur {
     @Column(name = "id_role_utilisateur")
     private Long idRoleUtilisateur;
 
-    @ManyToOne
-    @JoinColumn(name = "id_utilisateur", nullable = false)
-    private Utilisateur utilisateur;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 20)
+    @NotNull(message = "Le rôle ne peut pas être nul.")
+    @Column(name = "role", nullable = false, length = 20, unique = true)
     private Role role;
 
     public enum Role {
-        Candidat, Stagiaire, Encadrant, Administrateur
+        CANDIDAT, STAGIAIRE, ENCADRANT, ADMINISTRATEUR
+    }
+
+    @Override
+    public String toString() {
+        return role != null ? role.name() : "ROLE_UNDEFINED";
     }
 }
